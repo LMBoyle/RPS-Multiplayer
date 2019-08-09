@@ -6,14 +6,89 @@
 
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Julee&display=swap" rel="stylesheet">
   </head>
 
   <body>
+    <div class="grid-container">
+      <!-- Score -->
+      <div class="score">
+
+      </div>
+
+      <!-- User 1 -->
+      <div class="user1">
+        <div class="oneName">
+          <!-- Enter Name -->
+          User One:
+          <div class="oneInput">
+            <input type="text" id="userOne" placeholder="John Doe">
+            <input type="submit" id="submitOne" value="Submit">
+          </div>
+        </div>
+
+        <!-- Waiting Screen -->
+        <div class="oneWaiting">
+          Waiting For User Two
+        </div>
+
+        <!-- Elements -->
+        <div class="oneElements">
+          <img src="assets/images/fire.jpg" alt="fire" id="fireElement">
+          <img src="assets/images/air.jpg" alt="air" id="airElement">
+          <img src="assets/images/earth.jpg" alt="earth" id="earthElement">
+          <img src="assets/images/water.jpg" alt="water" id="waterElement">
+        </div>
+
+        <!-- Choice -->
+        <div class="oneChoice">
+        </div>
+      </div>
+
+      <!-- User 2 -->
+      <div class="user2">
+        <div class="twoName">
+          <!-- Enter Name -->
+          User Two:
+          <div class="twoInput">
+            <input type="text" id="userTwo" placeholder="Jane Doe">
+            <input type="submit" id="submitTwo" value="Submit">
+          </div>
+        </div>
+
+        <!-- Waiting Screen -->
+        <div class="twoWaiting">
+          Waiting For User One
+        </div>
+
+        <!-- Elements -->
+        <div class="twoElements">
+          <img src="assets/images/fire.jpg" alt="fire" id="fireElement">
+          <img src="assets/images/air.jpg" alt="air" id="airElement">
+          <img src="assets/images/earth.jpg" alt="earth" id="earthElement">
+          <img src="assets/images/water.jpg" alt="water" id="waterElement">
+        </div>
+
+        <!-- Choice -->
+        <div class="twoChoice">
+
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <div class="chat">
+
+      </div>
+    </div>
 
       <!-- jQuery -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <!-- Core Firebase -->
-      <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+      <!-- Core Firebase JS SDK -->
+      <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+
+      <!-- TODO: Add SDKs for Firebase products that you want to use
+      https://firebase.google.com/docs/web/setup#config-web-app -->
+      
       <!-- Firebase Database -->
       <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-database.js"></script>  
       <!-- Javascript -->

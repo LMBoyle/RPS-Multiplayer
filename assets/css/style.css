@@ -7,6 +7,28 @@ html {
 }
 
 body {
-  background: url();
+  background: url(../images/background.jpg);
   background-color: #fff;
+  font-family: 'Julee', cursive;
+}
+
+/* Grid */
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
+
+.grid-container > div {
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+  justify-content: space-evenly;
+}
+
+/* Img */
+img {
+  height: 250px;
 }
