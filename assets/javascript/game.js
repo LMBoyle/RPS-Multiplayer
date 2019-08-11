@@ -13,44 +13,79 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 
+var fire = {
+  element: "fire",
+  image: "assets/images/fire.jpg",
+  id: "fireElement",
+}
+
+var water = {
+  element: "water",
+  image: "assets/images/water.jpg",
+  id: "waterElement",
+}
+
+var air = {
+  element: "air",
+  image: "assets/images/air.jpg",
+  id: "airElement",
+}
+
+var earth = {
+  element: "earth",
+  image: "assets/images/earth.jpg",
+  id: "earthElement",
+}
+
+var playerOne = "";
+var playerTwo = "";
+
+
 // Function(s) ===============================
+database.ref().on("value", function(snap){
+
+})
+
 
 function userNames() {
-
-  // TODO User types in name
-  $("#submitOne").on("click", function(){
-    console.log("you clicked one");
-    var oneName = $("#userOne").val().trim();
-
-    var userOne = {
-      userOne: oneName
-    }
-
-    database.ref().push(userOne);
-    $("#userOne").text(userOne)
-  })
-
-
-  // TODO Show game waiting screen
-  // TODO Second user types in name
-  $("#submitTwo").on("click", function(){
-    console.log("you clicked two");
-    var twoName = $("#userTwo").val().trim();
-
-    var userTwo = {
-      userTwo: twoName
-    }
-
-    database.ref().push(userTwo)
-  })
-
-  // Show selection screen
-  playGame()
-
+  if (playerOne === "" && playerTwo === "") {
+    console.log("Both empty")
+    // First user types in name
+    $("#submitOne").on("click", function(){
+      console.log("you clicked one");
+      // Get the name from the first text box
+      var oneName = $("#userOne").val().trim();
+      // Show the name on the screen
+      $(".oneName").text(oneName)
+      // Show that user is waiting for another player
+      $(".oneWaiting").text("Waiting for Player Two");
+      playerOne = oneName;
+      userNames();
+    })
+  }
+  else if (playerOne != "" && playerTwo === "") {
+    console.log("Player Two empty")
+    // Second user types in name
+    $("#submitTwo").on("click", function(){
+      console.log("you clicked two");
+      var twoName = $("#userTwo").val().trim();
+      playerTwo = twoName;
+      $(".twoName").text(twoName);
+      userNames();
+    })
+  }
+  else if (playerOne !== "" && playerTwo !== "") {
+    playGame();
+  }
 }
 
 function playGame() {
+  $(".oneWaiting").empty();
   // TODO Show selection screen
+  var img = $("<img>");
+  img.attr("src", fire.img);
+
+  $(".oneElements").append(img)
   // TODO User 1 makes selection
   // TODO User 2 makes selection
   // TODO Push selections to firebase
