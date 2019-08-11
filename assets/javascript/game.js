@@ -14,24 +14,32 @@ firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 
 var fire = {
+  div: $("<img>"),
+  div2: $("<img>"),
   element: "fire",
   image: "assets/images/fire.jpg",
   id: "fireElement",
 }
 
 var water = {
+  div: $("<img>"),
+  div2: $("<img>"),
   element: "water",
   image: "assets/images/water.jpg",
   id: "waterElement",
 }
 
 var air = {
+  div: $("<img>"),
+  div2: $("<img>"),
   element: "air",
   image: "assets/images/air.jpg",
   id: "airElement",
 }
 
 var earth = {
+  div: $("<img>"),
+  div2: $("<img>"),
   element: "earth",
   image: "assets/images/earth.jpg",
   id: "earthElement",
@@ -82,10 +90,28 @@ function userNames() {
 function playGame() {
   $(".oneWaiting").empty();
   // TODO Show selection screen
-  var img = $("<img>");
-  img.attr("src", fire.img);
+  fire.div.attr("src", fire.image).attr("alt", fire.id);
+  air.div.attr("src", air.image).attr("alt", air.id);
+  water.div.attr("src", water.image).attr("alt", water.id);
+  earth.div.attr("src", earth.image).attr("alt", earth.id);
 
-  $(".oneElements").append(img)
+
+  $(".oneElements").append(fire.div);
+  $(".oneElements").append(air.div);
+  $(".oneElements").append(water.div);
+  $(".oneElements").append(earth.div);
+
+  fire.div2.attr("src", fire.image).attr("alt", fire.id);
+  air.div2.attr("src", air.image).attr("alt", air.id);
+  water.div2.attr("src", water.image).attr("alt", water.id);
+  earth.div2.attr("src", earth.image).attr("alt", earth.id);
+
+  $(".twoElements").append(fire.div2);
+  $(".twoElements").append(air.div2);
+  $(".twoElements").append(water.div2);
+  $(".twoElements").append(earth.div2);
+
+
   // TODO User 1 makes selection
   // TODO User 2 makes selection
   // TODO Push selections to firebase
