@@ -85,7 +85,7 @@ connectedRef.on("value", function(snap) {
     database.ref("/players/" + playerNumber).remove();
     playerNumber = null;
 
-    showLogin(); //TODO
+    logInScreen();
   }
 })
 
@@ -270,12 +270,19 @@ function showLogin(){
   console.log("Login")
 }
 
-
-function loginPending(){
-
+function loginPending() {
+  $(".playerInput", "#player1Elements", "#player2Elements").hide();
+  $(".full").show();
 };
 
-function loggedIn(){
+function logInScreen() {
+  $(".full", "#player1Elements", "#player2Elements").hide();
+  $(".playerInput").show();
+};
+
+function loggedIn() {
+  $(".playerInput", ".full").hide();
+
   if (playerNumber == "1") {
     $("#player1Elements").show();
   }
@@ -291,11 +298,11 @@ function loggedIn(){
   }
 };
 
-function logInScreen() {
-  
-};
-
-
+// Show what each player picked
+function showSelection() {
+  $("#player1Elements", "#player2Elements", "#player1Pending", "#player2Pending", "#player1Made", "#player2Made").hide();
+  $("#player1Choice", "#player2Choice").show();
+}
 
 // Call ======================================
 $(document).ready(function() {

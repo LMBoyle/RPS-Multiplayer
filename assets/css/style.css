@@ -49,6 +49,10 @@ body {
   color: white;
 }
 
+.full {
+  display: none;
+}
+
 /* Player Names */
 #player1Name {
   grid-row: 2;
