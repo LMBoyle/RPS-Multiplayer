@@ -135,6 +135,11 @@ users.on("child_changed", function(childSnap) {
 
 // When player leaves
 users.on("child_removed", function(childSnap) {
+  chat.push ({
+    userID: "system",
+    text: childSnap.val().name + " had disconnected"
+  });
+
   window["player" + childSnap.key + "Log"] = false;
   window["player" + childSnap.key]  = {
     name: "",
@@ -142,6 +147,12 @@ users.on("child_removed", function(childSnap) {
     losses: 0,
     choice: "",
   }
+
+  // If both players leave, clear the chat
+  if (!player1Log && !player2Log) {
+    chat.remove();
+  }
+  
 })
 
 
