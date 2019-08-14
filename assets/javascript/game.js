@@ -1,35 +1,39 @@
-// VARS ======================================
-var elements = {
-  fire: {
-    div: $("<img>"),
-    div2: $("<img>"),
-    element: "fire",
-    image: "assets/images/fire.jpg",
-    id: "fireElement",
-  },
-  water: {
-    div: $("<img>"),
-    div2: $("<img>"),
-    element: "water",
-    image: "assets/images/water.jpg",
-    id: "waterElement",
-  },
-  air: {
-    div: $("<img>"),
-    div2: $("<img>"),
-    element: "air",
-    image: "assets/images/air.jpg",
-    id: "airElement",
-  },
-  earth: {
-    div: $("<img>"),
-    div2: $("<img>"),
-    element: "earth",
-    image: "assets/images/earth.jpg",
-    id: "earthElement",
-  },
+// VARS ======================================================================
+
+// Elements
+var fire = {
+  div: $("<img>"),
+  div2: $("<img>"),
+  element: "fire",
+  image: "assets/images/fire.jpg",
+  id: "fireElement",
 }
 
+var water = {
+  div: $("<img>"),
+  div2: $("<img>"),
+  element: "water",
+  image: "assets/images/water.jpg",
+  id: "waterElement",
+}
+
+var air = {
+  div: $("<img>"),
+  div2: $("<img>"),
+  element: "air",
+  image: "assets/images/air.jpg",
+  id: "airElement",
+}
+
+var earth = {
+  div: $("<img>"),
+  div2: $("<img>"),
+  element: "earth",
+  image: "assets/images/earth.jpg",
+  id: "earthElement",
+}
+
+// Players
 var player1 = {
   name: "",
   wins: 0,
@@ -44,7 +48,6 @@ var player2 = {
   choice: "",
 }
 
-
 var player1Log = false;
 var player2Log = false;
 
@@ -53,7 +56,7 @@ var playerNumber = null;
 var playerObject = null;
 
 
-// FIREBASE ==================================
+// FIREBASE ===================================================================
 var firebaseConfig = {
   apiKey: "AIzaSyDqyP_85IMsqL_2yDMSfPEm6zUq1TkwDJI",
   authDomain: "rps-multiplayer-48ef1.firebaseapp.com",
@@ -74,9 +77,50 @@ var chat = database.ref("/chat");
 
 var connectedRef = database.ref(".info/connected");
 
-// Firbase Functions =========================
+// Firebase Functions =========================================================
 
-// When player is added
+// If connection is lost
+connectedRef.on("value", function(snap) {
+  if (!snap.val() && playerNumber) {
+    database.ref("/players/" + playerNumber).remove();
+    playerNumber = null;
+
+    showLogin(); //TODO
+  }
+})
+
+// If chat message is sent
+chat.on("child_added", function(childSnap) {
+  let chatObj = childSnap.val();
+  let chatText = chatObj.text;
+  let logChat = $("<li>").attr("id", childSnap.key);
+
+  // Style messages based on sender
+  if (chatObj.userID == "system") {
+    logChat.addClass("system");
+  }
+  else if (chatObj.userID == playerNumber) {
+    logChat.addClass("currentUser");
+  }
+  else {
+    logChat.addClass("otherUser");
+  }
+
+  // Showing sender username with message
+  if (chatObj.name) {
+    chatText = "<strong>" + chatObj.name + ":</strong> " + chatText;
+  }
+
+  logChat.html(chatText);
+  $("#chatLog").append(logChat)
+})
+
+// When chat message is deleted, delete from page
+chat.on("child_removed", function (childSnap) {
+  $("#" + childSnap.key). remove()
+})
+
+//* When player is added
 users.on("child_added", function(childSnap) {
   console.log("player " + childSnap.key +  " added")
   window["player" + childSnap.key + "Log"] = true;
@@ -101,9 +145,10 @@ users.on("child_removed", function(childSnap) {
 })
 
 
-// Function(s) ===============================
 
-// * =========================================================================
+
+// Function(s) ===============================================================
+
 function submitName(event) {
   event.preventDefault();
   console.log("Event: ", event);
@@ -139,9 +184,6 @@ function submitName(event) {
   }
 }
 
-
-
-// * ===========================================================================================
 function playGame() {
   $(".oneWaiting").empty();
   // Show selection screen
@@ -153,19 +195,33 @@ function playGame() {
 
 }
 
-function scoring() {
+function updateStats() {
   // TODO Show each users selection
   // TODO Show which user won
   // TODO Update win and loss
 }
 
-function chat() {
+function submitChat(event) {
+  event.preventDefault();
+  console.log("You Clicked Chat")
   // TODO Show chat
   // TODO If user types something, push to firebase 
+  chat.push({
+    userID: playerNumber,
+    name: playerName,
+    text: $("#chat").val().trim(),
+  });
+
+  $("#chat").val("")
   // TODO Show chat message on both screens
+}
+
+function showLogin(){
+  console.log("Login")
 }
 
 // Call ======================================
 $(document).ready(function() {
-  $("#submitPlayer").on("click", submitName)
+  $("#submitPlayer").on("click", submitName);
+  $("#submitChat").on("click", submitChat);
 })
