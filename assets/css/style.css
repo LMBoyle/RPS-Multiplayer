@@ -35,56 +35,56 @@ body {
 }
 
 /* Players */
-.player {
+.player1 {
   grid-column: 2;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   color: white;
 }
 
-.opponent {
+.player2 {
   grid-column: 5;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   color: white;
 }
 
-/* Waiting for Players */
-#playerWaiting {
-  grid-row: 2;
-  grid-column: 1;
-}
-
-#oppWaiting {
-  grid-row: 2;
-  grid-column: 5;
-}
-
 /* Player Names */
-#playerName {
+#player1Name {
   grid-row: 2;
   grid-column: 1;
-  display: none;
 }
 
-#oppName {
+#player2Name {
   grid-row: 2;
   grid-column: 5;
-  display: none;
 }
 
 /* Elements */
-#playerElements {
+#player1Elements {
   grid-row: 3;
   grid-column: 1;
   display: none;
 }
 
-#oppElements {
+#player2Elements {
   grid-row: 3;
   grid-column: 5;
   display: none;
 }
+
+#player1Pending,
+#player1Made,
+#player1Choice {
+  display: none
+}
+
+#player2Pending,
+#player2Made,
+#player2Choice {
+  display: none
+}
+
 
 /* Img */
 img {
@@ -99,8 +99,26 @@ img {
 
 #chatLog {
   background-color: white;
+  height: 150px;
+  overflow: scroll;
+}
+
+#chatLog li {
+  padding: 5px;
 }
 
 #chat {
   width: 924px;
+}
+
+.system {
+  color: grey;
+}
+
+.currentUser {
+  color: blue;
+}
+
+.otherUser {
+  color: red;
 }

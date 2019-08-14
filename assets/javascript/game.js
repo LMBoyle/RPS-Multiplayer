@@ -111,6 +111,7 @@ chat.on("child_added", function(childSnap) {
     chatText = "<strong>" + chatObj.name + ":</strong> " + chatText;
   }
 
+  // Show chat message on both screens
   logChat.html(chatText);
   $("#chatLog").append(logChat)
 })
@@ -120,7 +121,7 @@ chat.on("child_removed", function (childSnap) {
   $("#" + childSnap.key). remove()
 })
 
-//* When player is added
+// When player is added
 users.on("child_added", function(childSnap) {
   console.log("player " + childSnap.key +  " added")
   window["player" + childSnap.key + "Log"] = true;
@@ -152,7 +153,32 @@ users.on("child_removed", function(childSnap) {
   if (!player1Log && !player2Log) {
     chat.remove();
   }
-  
+
+})
+
+// When other changes are made with players
+users.on("value", function(snap) {
+  // Update player names
+  $("#player1Name").text(player1.name || "Waiting for Player 1");
+  $("#player2Name").text(player2.name || "Waiting for Player 2");
+
+  turnsWaiting("1", snap.child("1").exists(), snap.child("1").exists() && snap.child("1").val().choice)
+  turnsWaiting("2", snap.child("2").exists(), snap.child("2").exists() && snap.child("2").val().choice)
+
+  if (player1Log && player2Log && !playerNumber) {
+    loginPending();
+  }
+  else if (playerNumber) {
+    loggedIn();
+  }
+  else {
+    logInScreen();
+  }
+
+  if (player1.choice && player2.choice) {
+    playGame(player1.choice, player2.choice)
+  }
+
 })
 
 
@@ -186,24 +212,38 @@ function submitName(event) {
     playerObject.name = playerName;
     $("#user").val("");
 
-    $("#playerWaiting").toggle();
-    $("#playerName").toggle();
-    $("#playerName").text("Player: " + playerName);
-
     database.ref("/players/" + playerNumber).set(playerObject);
     database.ref("/players/" + playerNumber).onDisconnect().remove();
   }
 }
 
 function playGame() {
-  $(".oneWaiting").empty();
   // Show selection screen
 
 // If user is one, don't let click
   // TODO User 1 makes selection
   // TODO User 2 makes selection
   // TODO Push selections to firebase
+}
 
+// Display if users have made their choices
+function turnsWaiting(playerNum, exists, choice) {
+  if (exists) {
+    if (playerNumber != playerNum) {
+      if (choice) {
+        $("#player" + playerNum + "Made").show();
+        $("#player" + playerNum + "Pending").hide();
+      }
+      else {
+        $("#player" + playerNum + "Made").hide();
+        $("#player" + playerNum + "Pending").show();
+      }
+    }
+  }
+  else {
+    $("#player" + playerNum + "Made").hide();
+    $("#player" + playerNum + "Pending").hide();
+  }
 }
 
 function updateStats() {
@@ -215,8 +255,8 @@ function updateStats() {
 function submitChat(event) {
   event.preventDefault();
   console.log("You Clicked Chat")
-  // TODO Show chat
-  // TODO If user types something, push to firebase 
+
+  // If user types something, push to firebase 
   chat.push({
     userID: playerNumber,
     name: playerName,
@@ -224,12 +264,38 @@ function submitChat(event) {
   });
 
   $("#chat").val("")
-  // TODO Show chat message on both screens
 }
 
 function showLogin(){
   console.log("Login")
 }
+
+
+function loginPending(){
+
+};
+
+function loggedIn(){
+  if (playerNumber == "1") {
+    $("#player1Elements").show();
+  }
+  else {
+    $("#player1Elements").hide();
+  }
+
+  if (playerNumber == "2") {
+    $("#player2Elements").show();
+  }
+  else {
+    $("#player2Elements").hide();
+  }
+};
+
+function logInScreen() {
+  
+};
+
+
 
 // Call ======================================
 $(document).ready(function() {
