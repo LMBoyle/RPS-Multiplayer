@@ -1,4 +1,59 @@
 // VARS ======================================
+var elements = {
+  fire: {
+    div: $("<img>"),
+    div2: $("<img>"),
+    element: "fire",
+    image: "assets/images/fire.jpg",
+    id: "fireElement",
+  },
+  water: {
+    div: $("<img>"),
+    div2: $("<img>"),
+    element: "water",
+    image: "assets/images/water.jpg",
+    id: "waterElement",
+  },
+  air: {
+    div: $("<img>"),
+    div2: $("<img>"),
+    element: "air",
+    image: "assets/images/air.jpg",
+    id: "airElement",
+  },
+  earth: {
+    div: $("<img>"),
+    div2: $("<img>"),
+    element: "earth",
+    image: "assets/images/earth.jpg",
+    id: "earthElement",
+  },
+}
+
+var player1 = {
+  name: "",
+  wins: 0,
+  losses: 0,
+  choice: "",
+}
+
+var player2 = {
+  name: "",
+  wins: 0,
+  losses: 0,
+  choice: "",
+}
+
+
+var player1Log = false;
+var player2Log = false;
+
+var playerName;
+var playerNumber = null;
+var playerObject = null;
+
+
+// FIREBASE ==================================
 var firebaseConfig = {
   apiKey: "AIzaSyDqyP_85IMsqL_2yDMSfPEm6zUq1TkwDJI",
   authDomain: "rps-multiplayer-48ef1.firebaseapp.com",
@@ -13,105 +68,85 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 
-var fire = {
-  div: $("<img>"),
-  div2: $("<img>"),
-  element: "fire",
-  image: "assets/images/fire.jpg",
-  id: "fireElement",
-}
+var users = database.ref("/players");
 
-var water = {
-  div: $("<img>"),
-  div2: $("<img>"),
-  element: "water",
-  image: "assets/images/water.jpg",
-  id: "waterElement",
-}
+var chat = database.ref("/chat");
 
-var air = {
-  div: $("<img>"),
-  div2: $("<img>"),
-  element: "air",
-  image: "assets/images/air.jpg",
-  id: "airElement",
-}
+var connectedRef = database.ref(".info/connected");
 
-var earth = {
-  div: $("<img>"),
-  div2: $("<img>"),
-  element: "earth",
-  image: "assets/images/earth.jpg",
-  id: "earthElement",
-}
+// Firbase Functions =========================
 
-var playerOne = "";
-var playerTwo = "";
+// When player is added
+users.on("child_added", function(childSnap) {
+  console.log("player " + childSnap.key +  " added")
+  window["player" + childSnap.key + "Log"] = true;
+  window["player" + childSnap.key]  = childSnap.val()
+})
 
+// When player changes
+users.on("child_changed", function(childSnap) {
+  window["player" + childSnap.key]  = childSnap.val();
+  updateStats(); //TODO
+})
 
-// Function(s) ===============================
-database.ref().on("value", function(snap){
-
+// When player leaves
+users.on("child_removed", function(childSnap) {
+  window["player" + childSnap.key + "Log"] = false;
+  window["player" + childSnap.key]  = {
+    name: "",
+    wins: 0,
+    losses: 0,
+    choice: "",
+  }
 })
 
 
-function userNames() {
-  if (playerOne === "" && playerTwo === "") {
-    console.log("Both empty")
-    // First user types in name
-    $("#submitOne").on("click", function(){
-      console.log("you clicked one");
-      // Get the name from the first text box
-      var oneName = $("#userOne").val().trim();
-      // Show the name on the screen
-      $(".oneName").text(oneName)
-      // Show that user is waiting for another player
-      $(".oneWaiting").text("Waiting for Player Two");
-      playerOne = oneName;
-      userNames();
-    })
+// Function(s) ===============================
+
+// * =========================================================================
+function submitName(event) {
+  event.preventDefault();
+  console.log("Event: ", event);
+
+  if (!player1Log) {
+    playerNumber = "1";
+    console.log('playerNumber1:', playerNumber)
+    playerObject = player1;
+    console.log('playerObject1:', playerObject)
   }
-  else if (playerOne != "" && playerTwo === "") {
-    console.log("Player Two empty")
-    // Second user types in name
-    $("#submitTwo").on("click", function(){
-      console.log("you clicked two");
-      var twoName = $("#userTwo").val().trim();
-      playerTwo = twoName;
-      $(".twoName").text(twoName);
-      userNames();
-    })
+  else if (!player2Log) {
+    playerNumber = "2";
+    console.log('playerNumber2:', playerNumber)
+    playerObject = player2;
+    console.log('playerObject2:', playerObject)
   }
-  else if (playerOne !== "" && playerTwo !== "") {
-    playGame();
+  else {
+    playerNumber = null;
+    playerObject = null;
+  }
+
+  if (playerNumber) {
+    playerName = $("#user").val().trim();;
+    playerObject.name = playerName;
+    $("#user").val("");
+
+    $("#playerWaiting").toggle();
+    $("#playerName").toggle();
+    $("#playerName").text("Player: " + playerName);
+
+    database.ref("/players/" + playerNumber).set(playerObject);
+    database.ref("/players/" + playerNumber).onDisconnect().remove();
   }
 }
 
+
+
+// * ===========================================================================================
 function playGame() {
   $(".oneWaiting").empty();
-  // TODO Show selection screen
-  fire.div.attr("src", fire.image).attr("alt", fire.id);
-  air.div.attr("src", air.image).attr("alt", air.id);
-  water.div.attr("src", water.image).attr("alt", water.id);
-  earth.div.attr("src", earth.image).attr("alt", earth.id);
+  // Show selection screen
 
-
-  $(".oneElements").append(fire.div);
-  $(".oneElements").append(air.div);
-  $(".oneElements").append(water.div);
-  $(".oneElements").append(earth.div);
-
-  fire.div2.attr("src", fire.image).attr("alt", fire.id);
-  air.div2.attr("src", air.image).attr("alt", air.id);
-  water.div2.attr("src", water.image).attr("alt", water.id);
-  earth.div2.attr("src", earth.image).attr("alt", earth.id);
-
-  $(".twoElements").append(fire.div2);
-  $(".twoElements").append(air.div2);
-  $(".twoElements").append(water.div2);
-  $(".twoElements").append(earth.div2);
-
-
+// If user is one, don't let click
   // TODO User 1 makes selection
   // TODO User 2 makes selection
   // TODO Push selections to firebase
@@ -131,4 +166,6 @@ function chat() {
 }
 
 // Call ======================================
-userNames()
+$(document).ready(function() {
+  $("#submitPlayer").on("click", submitName)
+})

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
+
   <head>
     <meta charset='UTF-8'>
     <title> RPS Multiplayer </title>
@@ -12,62 +13,76 @@
   <body>
     <div class="grid-container">
       <!-- Score -->
-      <div class="score">
+      <div class="score"></div>
 
+      <!-- Enter Name -->
+      <div class="playerInput">
+        <input type="text" id="user" placeholder="John Doe">
+        <input type="submit" id="submitPlayer" value="Submit">
       </div>
 
-      <!-- User 1 -->
-      <div class="user1">
-        <div class="oneName">
-          <!-- Enter Name -->
-          User One:
-          <div class="oneInput">
-            <input type="text" id="userOne" placeholder="John Doe">
-            <input type="submit" id="submitOne" value="Submit">
-          </div>
+
+      <!-- Player -->
+      <div class="player">
+        <!-- Waiting Screen -->
+        <div id="playerWaiting">
+        Waiting for Player 1
         </div>
 
-        <!-- Waiting Screen -->
-        <div class="oneWaiting">
+        <div id="playerName">
+          Player:
         </div>
 
         <!-- Elements -->
-        <div class="oneElements">
+        <div id="playerElements">
+          <img src="assets/images/fire.jpg" alt="fire" id="playerFire">
+          <img src="assets/images/water.jpg" alt="water" id="playerWater">
+          <img src="assets/images/air.jpg" alt="air" id="playerAir">
+          <img src="assets/images/earth.jpg" alt="earth" id="playerEarth">
         </div>
 
         <!-- Choice -->
-        <div class="oneChoice">
+        <div id="playerChoice">
         </div>
       </div>
 
-      <!-- User 2 -->
-      <div class="user2">
-        <div class="twoName">
-          <!-- Enter Name -->
-          User Two:
-          <div class="twoInput">
-            <input type="text" id="userTwo" placeholder="Jane Doe">
-            <input type="submit" id="submitTwo" value="Submit">
-          </div>
+      <!-- Opponent  -->
+      <div class="opponent">
+        <!-- Waiting Screen -->
+        <div id="oppWaiting">
+          Waiting for Player 2
         </div>
 
-        <!-- Waiting Screen -->
-        <div class="twoWaiting">
+        <div id="oppName">
+          Opponent:
         </div>
 
         <!-- Elements -->
-        <div class="twoElements">
+        <div id="oppElements">
+          <img src="assets/images/fire.jpg" alt="fire" id="oppFire">
+          <img src="assets/images/water.jpg" alt="water" id="oppWater">
+          <img src="assets/images/air.jpg" alt="air" id="oppAir">
+          <img src="assets/images/earth.jpg" alt="earth" id="oppEarth">
         </div>
 
         <!-- Choice -->
-        <div class="twoChoice">
+        <div id="oppChoice">
 
         </div>
       </div>
 
       <!-- Chat -->
-      <div class="chat">
+      <div class="chatBox">
+        
+        <div>
+          <ul id="chatLog">
+            <li> Hello </li>
+            <li> Hi! </li>
+          </ul>
+        </div>
 
+        <input type="text" id="chat" placeholder="Your Message">
+        <input type="submit" id="submitChat" value="Submit">
       </div>
     </div>
 

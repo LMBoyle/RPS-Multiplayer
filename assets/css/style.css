@@ -16,7 +16,7 @@ body {
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
+  grid-template-columns: 250px 250px 250px 250px 250px 250px;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
 }
@@ -28,7 +28,79 @@ body {
   justify-content: space-evenly;
 }
 
+/* Input Box */
+.playerInput {
+  grid-row: 1;
+  grid-column: 1 / span 6;
+}
+
+/* Players */
+.player {
+  grid-column: 2;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  color: white;
+}
+
+.opponent {
+  grid-column: 5;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  color: white;
+}
+
+/* Waiting for Players */
+#playerWaiting {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+#oppWaiting {
+  grid-row: 2;
+  grid-column: 5;
+}
+
+/* Player Names */
+#playerName {
+  grid-row: 2;
+  grid-column: 1;
+  display: none;
+}
+
+#oppName {
+  grid-row: 2;
+  grid-column: 5;
+  display: none;
+}
+
+/* Elements */
+#playerElements {
+  grid-row: 3;
+  grid-column: 1;
+  display: none;
+}
+
+#oppElements {
+  grid-row: 3;
+  grid-column: 5;
+  display: none;
+}
+
 /* Img */
 img {
-  height: 250px;
+  height: 130px;
+}
+
+/* Chat */
+.chatBox {
+  grid-row: 3;
+  grid-column: 2 / span 4;
+}
+
+#chatLog {
+  background-color: white;
+}
+
+#chat {
+  width: 924px;
 }
