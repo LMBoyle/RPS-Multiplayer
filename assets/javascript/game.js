@@ -88,7 +88,7 @@ connectedRef.on("value", function(snap) {
 
     logInScreen();
   }
-})
+}, error);
 
 // If chat message is sent
 chat.on("child_added", function(childSnap) {
@@ -115,25 +115,25 @@ chat.on("child_added", function(childSnap) {
   // Show chat message on both screens
   logChat.html(chatText);
   $("#chatLog").append(logChat)
-})
+}, error);
 
 // When chat message is deleted, delete from page
 chat.on("child_removed", function (childSnap) {
   $("#" + childSnap.key). remove()
-})
+}, error);
 
 // When player is added
 users.on("child_added", function(childSnap) {
   console.log("player " + childSnap.key +  " added")
   window["player" + childSnap.key + "Log"] = true;
   window["player" + childSnap.key]  = childSnap.val()
-})
+}, error);
 
 // When player changes
 users.on("child_changed", function(childSnap) {
   window["player" + childSnap.key]  = childSnap.val();
   updateStats();
-})
+}, error);
 
 // When player leaves
 users.on("child_removed", function(childSnap) {
@@ -154,7 +154,7 @@ users.on("child_removed", function(childSnap) {
   if (!player1Log && !player2Log) {
     chat.remove();
   }
-})
+}, error);
 
 // When other changes are made with players
 users.on("value", function(snap) {
@@ -178,8 +178,11 @@ users.on("value", function(snap) {
   if (player1.choice && player2.choice) {
     playGame(player1.choice, player2.choice)
   }
-})
+}, error);
 
+function error(errorObject) {
+  console.log("Errors handled: " + errorObject.code);
+}
 // Function(s) ===============================================================
 
 function submitName(event) {
