@@ -134,21 +134,23 @@ img {
   grid-column: 2 / span 3;
 }
 
-#chatLog {
+.chatDiv {
   background-color: white;
   height: 150px;
   overflow: scroll;
+  text-align: left;
 }
 
-#chatLog ul {
-  font-size: 25px;
-}
 
 #chatLog li {
+  font-size: 25px;
   padding: 5px;
   font-size: 20px;
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
+/* Chat Text Box */
 #chat {
   font-family: 'Julee', cursive;
   border: 0;
@@ -156,9 +158,10 @@ img {
   width: 823px;
   font-size: 20px;
   margin-top: 15px; 
-  padding: 5px;s
+  padding: 5px;
 }
 
+/* Chat Submit Button */
 #submitChat {
   font-family: 'Julee', cursive;
   border: 0;

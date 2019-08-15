@@ -115,6 +115,8 @@ chat.on("child_added", function(childSnap) {
   // Show chat message on both screens
   logChat.html(chatText);
   $("#chatLog").append(logChat)
+
+  $(".chatDiv").animate({scrollTop: $(".chatDiv")[0].scrollHeight}, 1000);
 }, error);
 
 // When chat message is deleted, delete from page
@@ -220,6 +222,8 @@ function playGame() {
   if (!playerNumber) return;
 
   playerObject.choice = this.id;
+  console.log("PLayer Number: ", playerNumber);
+  console.log("Player Object: ", playerObject)
 
   database.ref("/players/" + playerNumber).set(playerObject);
 
