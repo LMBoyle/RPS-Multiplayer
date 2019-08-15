@@ -82,6 +82,7 @@ var connectedRef = database.ref(".info/connected");
 
 // If connection is lost
 connectedRef.on("value", function(snap) {
+  console.log("connectedRef ", playerObject, " ", playerNumber)
   if (!snap.val() && playerNumber) {
     database.ref("/players/" + playerNumber).remove();
     playerNumber = null;
@@ -92,6 +93,7 @@ connectedRef.on("value", function(snap) {
 
 // If chat message is sent
 chat.on("child_added", function(childSnap) {
+  console.log("chat child added")
   let chatObj = childSnap.val();
   let chatText = chatObj.text;
   let logChat = $("<li>").attr("id", childSnap.key);
@@ -121,24 +123,30 @@ chat.on("child_added", function(childSnap) {
 
 // When chat message is deleted, delete from page
 chat.on("child_removed", function (childSnap) {
+  console.log("chat child removed ", playerObject, " ", playerNumber)
   $("#" + childSnap.key). remove()
 }, error);
 
 // When player is added
 users.on("child_added", function(childSnap) {
-  console.log("player " + childSnap.key +  " added")
+  console.log("users child added ", childSnap.key)
   window["player" + childSnap.key + "Log"] = true;
   window["player" + childSnap.key]  = childSnap.val()
+  console.log("Childsnap val child_added: ", childSnap.val())
 }, error);
 
 // When player changes
 users.on("child_changed", function(childSnap) {
+  console.log("users child changed ", playerObject, "number: ", playerNumber, "Key: ", childSnap.key)
+  console.log("Window: ", window["player" + childSnap.key])
+  console.log("Childsnap val child_changed: ", childSnap.val())
   window["player" + childSnap.key]  = childSnap.val();
   updateStats();
 }, error);
 
 // When player leaves
 users.on("child_removed", function(childSnap) {
+  console.log("users child removed ", playerObject, " ", playerNumber)
   chat.push ({
     userID: "system",
     text: childSnap.val().name + " had disconnected"
@@ -160,6 +168,7 @@ users.on("child_removed", function(childSnap) {
 
 // When other changes are made with players
 users.on("value", function(snap) {
+  console.log("users value ", playerObject, " ", playerNumber)
   // Update player names
   $("#player1Name").text(player1.name || "Waiting for Player 1");
   $("#player2Name").text(player2.name || "Waiting for Player 2");
@@ -178,7 +187,7 @@ users.on("value", function(snap) {
   }
 
   if (player1.choice && player2.choice) {
-    playGame(player1.choice, player2.choice)
+    compare(player1.choice, player2.choice)
   }
 }, error);
 
@@ -188,20 +197,16 @@ function error(errorObject) {
 // Function(s) ===============================================================
 
 function submitName(event) {
+  console.log("submitName ", playerObject, " ", playerNumber)
   event.preventDefault();
-  console.log("Event: ", event);
 
   if (!player1Log) {
     playerNumber = "1";
-    console.log('playerNumber1:', playerNumber)
     playerObject = player1;
-    console.log('playerObject1:', playerObject)
   }
   else if (!player2Log) {
     playerNumber = "2";
-    console.log('playerNumber2:', playerNumber)
     playerObject = player2;
-    console.log('playerObject2:', playerObject)
   }
   else {
     playerNumber = null;
@@ -209,7 +214,7 @@ function submitName(event) {
   }
 
   if (playerNumber) {
-    playerName = $("#user").val().trim();;
+    playerName = $("#user").val().trim();
     playerObject.name = playerName;
     $("#user").val("");
 
@@ -218,40 +223,39 @@ function submitName(event) {
   }
 }
 
+// ! Hide elements and shows choice
 function playGame() {
+  console.log("playGame ", this, "", playerObject, " ", playerNumber)
   if (!playerNumber) return;
 
   playerObject.choice = this.id;
-  console.log("PLayer Number: ", playerNumber);
   console.log("Player Object: ", playerObject)
 
   database.ref("/players/" + playerNumber).set(playerObject);
 
+  // Hide elements
   $("#player" + playerNumber + "Elements").hide();
+  // Put choice into div and show
   $("#player" + playerNumber + "Choice").text(this.id).show();
 }
 
-// Display if users have made their choices
-function turnsWaiting(playerNum, exists, choice) {
-  if (exists) {
-    if (playerNumber != playerNum) {
-      if (choice) {
-        $("#player" + playerNum + "Made").show();
-        $("#player" + playerNum + "Pending").hide();
-      }
-      else {
-        $("#player" + playerNum + "Made").hide();
-        $("#player" + playerNum + "Pending").show();
-      }
-    }
-  }
-  else {
-    $("#player" + playerNum + "Made").hide();
-    $("#player" + playerNum + "Pending").hide();
-  }
+function submitChat(event) {
+  console.log("submitChat ", playerObject, " ", playerNumber)
+  event.preventDefault();
+
+  // If user types something, push to firebase 
+  chat.push({
+    userID: playerNumber,
+    name: playerName,
+    text: $("#chat").val().trim(),
+  });
+
+  $("#chat").val("")
 }
 
+// Compare choices and display feedback
 function compare(p1choice, p2choice) {
+  console.log("compare ", playerObject, " ", playerNumber)
   $("#player1Choice").text(p1choice);
   $("#player2Choice").text(p2choice);
 
@@ -284,7 +288,9 @@ function compare(p1choice, p2choice) {
   reset = setTimeout(resetGame, 3000)
 }
 
+//! Sets choice to nothing
 function resetGame() {
+  console.log("resetGame ", playerObject, " ", playerNumber)
   clearTimeout(reset);
 
   playerObject.choice = "";
@@ -295,50 +301,77 @@ function resetGame() {
   $(".feedback").empty();
 }
 
+
 function updateStats() {
-  ["1", "2"].forEach(playerNum => {
-    var obj = window["player" + playerNum];
-    $("#player" + playerNum + "Wins").text(obj.wins);
-    $("#player" + playerNum + "Losses").text(obj.losses);
-  })
+  console.log("updateStats ", playerObject, " ", playerNumber)
 
-  // player1Log ? $("#player1stats").show() : $("#player1stats").hide();
-  // player2Log ? $("#player2stats").show() : $("#player2stats").hide();
+  ["1", "2"]. forEach(playerNum => {
+      var obj = window["player" + playerNum];
+      $("#player" + playerNum + "Wins").text(obj.wins);
+      $("#player" + playerNum + "Losses").text(obj.losses);
+    });
+
+  player1Log ? $("#player1stats").show() : $("#player1stats").hide();
+  player2Log ? $("#player2stats").show() : $("#player2stats").hide();
 }
 
-function submitChat(event) {
-  event.preventDefault();
-  console.log("You Clicked Chat")
-
-  // If user types something, push to firebase 
-  chat.push({
-    userID: playerNumber,
-    name: playerName,
-    text: $("#chat").val().trim(),
-  });
-
-  $("#chat").val("")
+// ! Shows and hides thinking vs choice made
+// Display if users have made their choices
+function turnsWaiting(playerNum, exists, choice) {
+  console.log("turnsWaiting ", playerObject, " ", playerNumber)
+  if (exists) { //if the playerNum "1" or "2" exists in database
+    if (playerNumber != playerNum) { //if the users number doesn't equal the playerNum
+      if (choice) { 
+        // Show player has made a choice
+        $("#player" + playerNum + "Made").show();
+        // Hide that player is thinking
+        $("#player" + playerNum + "Pending").hide();
+      }
+      else if (!choice) {
+        // Hide that player has made a choice
+        $("#player" + playerNum + "Made").hide();
+        // Show that player is thinking
+        $("#player" + playerNum + "Pending").show();
+      }
+    }
+  }
+  else if (!exists) {
+    $("#player" + playerNum + "Made").hide();
+    $("#player" + playerNum + "Pending").hide();
+  }
 }
 
-function showLogin(){
-  console.log("Login")
-}
-
+// Hides name input, chat box and elements
+// Shows game full
 function loginPending() {
-  $(".playerInput", ".elements").hide();
+  console.log("loginPending ", playerObject, " ", playerNumber)
+  $(".playerInput").hide();
+  $(".chatBox").hide();
+  $(".elements").hide();
   $(".full").show();
 };
 
+// Hides game full, chat box and elements
+// Shows name input
 function logInScreen() {
-  $(".full", ".elements").hide();
+  console.log("logInScreen ", playerObject, " ", playerNumber)
+  $(".full").hide();
+  $(".chatBox").hide();
+  $(".elements").hide();
   $(".playerInput").show();
 };
 
+// Hides name input and game full
+//! Shows chat box and elements based on user
 function loggedIn() {
-  $(".playerInput", ".full").hide();
+  console.log("loggedIn: ", playerObject, " ", playerNumber)
+  $(".playerInput").hide();
+  $(".full").hide();
+  $(".chatBox").show();
 
   if (playerNumber == "1") {
     $("#player1Elements").show();
+    console.log("Player One")
   }
   else {
     $("#player1Elements").hide();
@@ -346,15 +379,20 @@ function loggedIn() {
 
   if (playerNumber == "2") {
     $("#player2Elements").show();
+    console.log("Player Two")
   }
   else {
     $("#player2Elements").hide();
   }
 };
 
+// Hides elements, if player is thinking and if player has made a selection
 // Show what each player picked
 function showSelection() {
-  $(".elements", ".pending", ".selected").hide();
+  console.log("showSelection ", playerObject, " ", playerNumber)
+  $(".elements").hide();
+  $(".pending").hide();
+  $(".selected").hide();
   $(".choice").show();
 }
 
