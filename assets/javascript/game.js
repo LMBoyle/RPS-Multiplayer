@@ -55,6 +55,7 @@ var playerName;
 var playerNumber = null;
 var playerObject = null;
 
+var reset;
 
 // FIREBASE ===================================================================
 var firebaseConfig = {
@@ -179,9 +180,6 @@ users.on("value", function(snap) {
   }
 })
 
-
-
-
 // Function(s) ===============================================================
 
 function submitName(event) {
@@ -252,6 +250,42 @@ function compare(p1choice, p2choice) {
 
   showSelection();
 
+  if (p1choice == p2choice){
+    $(".feedback").text("It's a Tie!");
+  }
+  else if ((p1choice == "Fire" && p2choice == "Earth") || (p1choice == "Earth" && p2choice == "Air") || (p1choice == "Air" && p2choice == "Fire") || (p1choice == "Air" && p2choice == "Water") || (p1choice == "Water" && p2choice == "Earth") || (p1choice == "Water" && p2choice == "Fire")) {
+    $(".feedback").html("<small>" + p1choice + " beats " + p2choice + "</small><br/><br/>" + player1Object.name + " wins!");
+
+    if (playerNumber == "1") {
+      playerObject.wins++;
+    }
+    else {
+      playerObject.losses++;
+    }
+  }
+  else {
+    $(".feedback").html("<small>" + p2choice + " beats " + p1choice + "</small><br/><br/>" + player2Object.name + " wins!");
+
+    if (playerNumber == "2") {
+      playerObject.wins++;
+    }
+    else {
+      playerObject.losses++;
+    }
+  }
+
+  reset = setTimeout(resetGame, 3000)
+}
+
+function resetGame() {
+  clearTimeout(reset);
+
+  playerObject.choice = "";
+
+  database.ref("/players/" + playerNumber).set(playerObject);
+
+  $(".choice").hide();
+  $(".feedback").empty();
 }
 
 function updateStats() {
