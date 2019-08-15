@@ -131,7 +131,7 @@ users.on("child_added", function(childSnap) {
 // When player changes
 users.on("child_changed", function(childSnap) {
   window["player" + childSnap.key]  = childSnap.val();
-  updateStats(); //TODO
+  updateStats();
 })
 
 // When player leaves
@@ -153,7 +153,6 @@ users.on("child_removed", function(childSnap) {
   if (!player1Log && !player2Log) {
     chat.remove();
   }
-
 })
 
 // When other changes are made with players
@@ -178,7 +177,6 @@ users.on("value", function(snap) {
   if (player1.choice && player2.choice) {
     playGame(player1.choice, player2.choice)
   }
-
 })
 
 
@@ -218,12 +216,14 @@ function submitName(event) {
 }
 
 function playGame() {
-  // Show selection screen
+  if (!playerNumber) return;
 
-// If user is one, don't let click
-  // TODO User 1 makes selection
-  // TODO User 2 makes selection
-  // TODO Push selections to firebase
+  playerObject.choice = this.id;
+
+  database.ref("/players/" + playerNumber).set(playerObject);
+
+  $("#player" + playerNumber + "Elements").hide();
+  $("#player" + playerNumber + "Choice").text(this.id).show();
 }
 
 // Display if users have made their choices
@@ -246,10 +246,23 @@ function turnsWaiting(playerNum, exists, choice) {
   }
 }
 
+function compare(p1choice, p2choice) {
+  $("#player1Choice").text(p1choice);
+  $("#player2Choice").text(p2choice);
+
+  showSelection();
+
+}
+
 function updateStats() {
-  // TODO Show each users selection
-  // TODO Show which user won
-  // TODO Update win and loss
+  ["1", "2"].forEach(playerNum => {
+    var obj = window["player" + playerNum];
+    $("#player" + playerNum + "Wins").text(obj.wins);
+    $("#player" + playerNum + "Losses").text(obj.losses);
+  })
+
+  // player1Log ? $("#player1stats").show() : $("#player1stats").hide();
+  // player2Log ? $("#player2stats").show() : $("#player2stats").hide();
 }
 
 function submitChat(event) {
@@ -271,12 +284,12 @@ function showLogin(){
 }
 
 function loginPending() {
-  $(".playerInput", "#player1Elements", "#player2Elements").hide();
+  $(".playerInput", ".elements").hide();
   $(".full").show();
 };
 
 function logInScreen() {
-  $(".full", "#player1Elements", "#player2Elements").hide();
+  $(".full", ".elements").hide();
   $(".playerInput").show();
 };
 
@@ -300,12 +313,13 @@ function loggedIn() {
 
 // Show what each player picked
 function showSelection() {
-  $("#player1Elements", "#player2Elements", "#player1Pending", "#player2Pending", "#player1Made", "#player2Made").hide();
-  $("#player1Choice", "#player2Choice").show();
+  $(".elements", ".pending", ".selected").hide();
+  $(".choice").show();
 }
 
 // Call ======================================
 $(document).ready(function() {
   $("#submitPlayer").on("click", submitName);
   $("#submitChat").on("click", submitChat);
+  $(".elementSelect").on("click", playGame)
 })
