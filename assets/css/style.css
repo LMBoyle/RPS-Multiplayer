@@ -16,7 +16,7 @@ body {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 146px 512px auto 512px 146px;
+  grid-template-columns: 146px 400px auto 400px 146px;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
 }
@@ -76,7 +76,7 @@ body {
 }
 
 .feedback {
-  display: none;
+  /* display: none; */
   background-color: rgba(247, 177, 86, 0.7);
   grid-column: 3
 }
@@ -134,7 +134,7 @@ body {
 
 /* Img */
 img {
-  height: 130px;
+  height: 100px;
 }
 
 /* Chat */

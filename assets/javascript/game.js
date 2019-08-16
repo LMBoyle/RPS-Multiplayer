@@ -132,14 +132,11 @@ users.on("child_added", function(childSnap) {
   console.log("users child added ", childSnap.key)
   window["player" + childSnap.key + "Log"] = true;
   window["player" + childSnap.key]  = childSnap.val()
-  console.log("Childsnap val child_added: ", childSnap.val())
 }, error);
 
 // When player changes
 users.on("child_changed", function(childSnap) {
   console.log("users child changed ", playerObject, "number: ", playerNumber, "Key: ", childSnap.key)
-  console.log("Window: ", window["player" + childSnap.key])
-  console.log("Childsnap val child_changed: ", childSnap.val())
   window["player" + childSnap.key]  = childSnap.val();
   updateStats();
 }, error);
@@ -223,7 +220,7 @@ function submitName(event) {
   }
 }
 
-// ! Hide elements and shows choice
+// Hide elements and shows choice
 function playGame() {
   console.log("playGame ", this, "", playerObject, " ", playerNumber)
   if (!playerNumber) return;
@@ -255,7 +252,7 @@ function submitChat(event) {
 
 // Compare choices and display feedback
 function compare(p1choice, p2choice) {
-  console.log("compare ", playerObject, " ", playerNumber)
+  console.log("compare 1", playerObject, " ", playerNumber)
   $("#player1Choice").text(p1choice);
   $("#player2Choice").text(p2choice);
 
@@ -265,7 +262,7 @@ function compare(p1choice, p2choice) {
     $(".feedback").text("It's a Tie!");
   }
   else if ((p1choice == "Fire" && p2choice == "Earth") || (p1choice == "Earth" && p2choice == "Air") || (p1choice == "Air" && p2choice == "Fire") || (p1choice == "Air" && p2choice == "Water") || (p1choice == "Water" && p2choice == "Earth") || (p1choice == "Water" && p2choice == "Fire")) {
-    $(".feedback").html("<small>" + p1choice + " beats " + p2choice + "</small><br/><br/>" + player1Object.name + " wins!");
+    $(".feedback").html("<small>" + p1choice + " beats " + p2choice + "</small><br/><br/>" + player1.name + " wins!");
 
     if (playerNumber == "1") {
       playerObject.wins++;
@@ -275,7 +272,7 @@ function compare(p1choice, p2choice) {
     }
   }
   else {
-    $(".feedback").html("<small>" + p2choice + " beats " + p1choice + "</small><br/><br/>" + player2Object.name + " wins!");
+    $(".feedback").html("<small>" + p2choice + " beats " + p1choice + "</small><br/><br/>" + player2.name + " wins!");
 
     if (playerNumber == "2") {
       playerObject.wins++;
@@ -288,7 +285,7 @@ function compare(p1choice, p2choice) {
   reset = setTimeout(resetGame, 3000)
 }
 
-//! Sets choice to nothing
+// Sets choice to nothing
 function resetGame() {
   console.log("resetGame ", playerObject, " ", playerNumber)
   clearTimeout(reset);
@@ -305,17 +302,29 @@ function resetGame() {
 function updateStats() {
   console.log("updateStats ", playerObject, " ", playerNumber)
 
+  var playerNum = ["1", "2"]
+
+  for (i=0; i<playerNum.length; i++) {
+    var obj = window["player" + playerNum[i]];
+    console.log("Obj", obj);
+
+    $("#player" + playerNum[i] + "Wins").html(obj.wins);
+    $("#player" + playerNum[i] + "Losses").html(obj.losses);
+  }
+  
+  /*
   ["1", "2"]. forEach(playerNum => {
       var obj = window["player" + playerNum];
-      $("#player" + playerNum + "Wins").text(obj.wins);
-      $("#player" + playerNum + "Losses").text(obj.losses);
+      console.log("updateStats 2")
+      $("#player" + playerNum + "Wins").html(obj.wins);
+      $("#player" + playerNum + "Losses").html(obj.losses);
     });
-
+    */
   player1Log ? $("#player1stats").show() : $("#player1stats").hide();
   player2Log ? $("#player2stats").show() : $("#player2stats").hide();
 }
 
-// ! Shows and hides thinking vs choice made
+// Shows and hides thinking vs choice made
 // Display if users have made their choices
 function turnsWaiting(playerNum, exists, choice) {
   console.log("turnsWaiting ", playerObject, " ", playerNumber)
@@ -362,7 +371,7 @@ function logInScreen() {
 };
 
 // Hides name input and game full
-//! Shows chat box and elements based on user
+// Shows chat box and elements based on user
 function loggedIn() {
   console.log("loggedIn: ", playerObject, " ", playerNumber)
   $(".playerInput").hide();
