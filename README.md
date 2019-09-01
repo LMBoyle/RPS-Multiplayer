@@ -1,9 +1,21 @@
-# RPS-Multiplayer
+# GifTastic
+Play the game of rock, paper, scissors in the style of Avatar the Last Airbender 
 
-Made with HTML, CSS, JavaScript, Firebase
+Homework assignment for UNC Coding Bootcamp to learn how to use Firebase for storing and retrieving data
 
-Play the game of rock, paper, scissors in the style of Avatar the Last Airbender
+## Instructions
+Enter your name then wait for someone else to join. When there are two players choose your element, wait for your opponent to choose theirs and find out who won. 
 
-[Deployed link](https://lmboyle.github.io/RPS-Multiplayer/)
+Chat function as well, type whatever you want and both users can see it. 
 
-[Basic Portfolio](https://lmboyle.github.io/Basic-Portfolio/portfolio.html)
+## Languages/Technologies 
+* HTML
+* CSS
+* JavaScript
+* jQuery
+* Firebase
+
+## Links
+[Deployed Link](https://lmboyle.github.io/RPS-Multiplayer/)
+
+[Portfolio](https://lmboyle.github.io/)
