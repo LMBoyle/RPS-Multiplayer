@@ -1,4 +1,4 @@
-# GifTastic
+# RPS Multiplayer
 Play the game of rock, paper, scissors in the style of Avatar the Last Airbender 
 
 Homework assignment for UNC Coding Bootcamp to learn how to use Firebase for storing and retrieving data
