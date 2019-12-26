@@ -1,15 +1,13 @@
-# RPS Multiplayer
-Play the game of rock, paper, scissors in the style of Avatar the Last Airbender 
+# [RPS Multiplayer](https://github.com/LMBoyle/rpsMultiplayer)
+Play the game of rock, paper, scissors in the style of Avatar the Last Airbender
 
 ## Instructions
-Enter your name then wait for someone else to join. When there are two players choose your element, wait for your opponent to choose theirs and find out who won. 
+Enter your name then wait for someone else to join. 
+When there are two players choose your element, wait for your opponent to choose theirs and find out who won. 
 
-Chat function as well, type whatever you want and both users can see it. 
+To use chat, type whatever you want and send it for your opponent to see.
 
-## What It Teaches
-How to use Firebase for storing and retrieving data
-
-## Languages/Technologies 
+## Built With
 * HTML
 * CSS
 * JavaScript
@@ -17,6 +15,7 @@ How to use Firebase for storing and retrieving data
 * Firebase
 
 ## Demo
+
 ![Demo Gif](assets/images/rpsDemo.gif)
 
 ## Future Development/Improvements
@@ -24,7 +23,4 @@ How to use Firebase for storing and retrieving data
 - [ ] Have chat clear out previous session text
 - [ ] Center game more in the middle of the page instead of the top
 
-## Links
-[Deployed Link](https://lmboyle.github.io/RPS-Multiplayer/)
-
-[Portfolio](https://lmboyle.github.io/)
+&copy; 2019 [Luke Boyle](https://lmboyle.github.io/)
